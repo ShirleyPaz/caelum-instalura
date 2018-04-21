@@ -31,7 +31,7 @@ export default class Post extends Component {
             return
 
         return <Text style={styles.curtidas}>
-            {likers.length} {likers.lenght === 1 ? 'curtida' : 'curtidas'}
+            {likers.length} {likers.length > 1 ? 'curtidas' : 'curtida'}
         </Text>
     }
 
