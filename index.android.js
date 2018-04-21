@@ -41,7 +41,7 @@ export default class InstaluraMobile extends Component {
         data={this.state.fotos}
         keyExtractor={item => item.id}
         renderItem={({ item }) =>
-          <Post fotos={item} />
+          <Post foto={item} />
         } />
     );
   }
@@ -52,5 +52,5 @@ const styles = StyleSheet.create({
     marginTop: 20
   }
 });
-https://instalura-api.herokuapp.com/api/public/fotos/rafael
+
 AppRegistry.registerComponent('InstaluraMobile', () => InstaluraMobile);
