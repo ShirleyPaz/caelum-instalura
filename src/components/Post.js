@@ -82,7 +82,7 @@ export default class Post extends Component {
 
     render() {
 
-        const { foto } = this.state;
+        const { foto } = this.state
 
         return (
             <View>
@@ -105,6 +105,14 @@ export default class Post extends Component {
                     </TouchableOpacity>
                     {this.exibeLikes(foto.likers)}
                     {this.exibeLegenda(foto)}
+                    {foto.comentarios.map( (comentario) =>
+                        <View style={styles.comentario} key={comentario.id}>
+                            <Text style={styles.tituloComentario}>
+                                {comentario.login}
+                            </Text>
+                            <Text>{comentario.texto}</Text>
+                        </View>
+                    )}
                 </View>
             </View>
         )
@@ -144,7 +152,7 @@ const styles = StyleSheet.create({
     },
     tituloComentario: {
         fontWeight: 'bold',
-        marginRight:  5,
+        marginRight: 10,
     }
 });
 
