@@ -26,8 +26,22 @@ export default class Post extends Component {
 
     }
 
+    exibeLegenda = (foto) => {
+        if (foto.comentario === '')
+            return;
+
+        return (
+            <View style={styles.comentario}>
+                <Text style={styles.tituloComentario}>
+                    {foto.loginUsuario}
+                </Text>
+                <Text>{foto.comentario}</Text>
+            </View>
+        )
+    }
+
     exibeLikes = (likers) => {
-        if (likers.length < 1) 
+        if (likers.length < 1)
             return
 
         return <Text style={styles.curtidas}>
@@ -74,7 +88,7 @@ export default class Post extends Component {
             <View>
                 <View style={styles.header}>
                     <Image style={styles.fotoDePerfil}
-                        source={{ uri: foto.urlPerfil }}
+                        source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCaZQV5CG5Yot73jl8iSHvZyRId2PUQs7XPx9Gv05VgE1nn_JZWw' }}
                     />
                     <Text>{foto.loginUsuario}</Text>
                 </View>
@@ -90,6 +104,7 @@ export default class Post extends Component {
                             source={this.carregaIcone(foto.likeada)} />
                     </TouchableOpacity>
                     {this.exibeLikes(foto.likers)}
+                    {this.exibeLegenda(foto)}
                 </View>
             </View>
         )
@@ -105,7 +120,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     fotoDePerfil: {
-        marginRight: 0,
+        marginRight: 10,
         width: 40,
         height: 40,
         borderRadius: 20,
@@ -124,5 +139,12 @@ const styles = StyleSheet.create({
     curtidas: {
         fontWeight: 'bold',
     },
+    comentario: {
+        flexDirection: 'row',
+    },
+    tituloComentario: {
+        fontWeight: 'bold',
+        marginRight:  5,
+    }
 });
 
