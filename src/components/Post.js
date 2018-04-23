@@ -13,7 +13,8 @@ import {
     View,
     Dimensions,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+    TextInput
 } from 'react-native';
 
 
@@ -21,7 +22,8 @@ export default class Post extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            foto: this.props.foto
+            foto: this.props.foto,
+            valorComentario: '',
         }
 
     }
@@ -79,6 +81,29 @@ export default class Post extends Component {
         this.setState({ foto: fotoAtualiza });
     }
 
+    adicionaComentario = (inputComentario) => {
+        
+        if(this.state.valorComentario === '') 
+            return;
+        
+        const novaLista = [
+            ...this.state.foto.comentarios,
+            {
+                id: Math.random(),
+                login: 'meuUsuario',
+                texto: this.state.valorComentario,
+            }
+        ]
+
+        const fotoAtualiza = {
+            ...this.state.foto,
+            comentarios: novaLista,
+        }
+        //logica
+        this.setState({foto: fotoAtualiza, valorComentario: ''})
+        this.inputComentario.clear();
+    }
+
 
     render() {
 
@@ -88,7 +113,7 @@ export default class Post extends Component {
             <View>
                 <View style={styles.header}>
                     <Image style={styles.fotoDePerfil}
-                        source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQCaZQV5CG5Yot73jl8iSHvZyRId2PUQs7XPx9Gv05VgE1nn_JZWw' }}
+                        source={{uri: foto.urlPerfil}}
                     />
                     <Text>{foto.loginUsuario}</Text>
                 </View>
@@ -105,7 +130,7 @@ export default class Post extends Component {
                     </TouchableOpacity>
                     {this.exibeLikes(foto.likers)}
                     {this.exibeLegenda(foto)}
-                    {foto.comentarios.map( (comentario) =>
+                    {foto.comentarios.map((comentario) =>
                         <View style={styles.comentario} key={comentario.id}>
                             <Text style={styles.tituloComentario}>
                                 {comentario.login}
@@ -113,6 +138,17 @@ export default class Post extends Component {
                             <Text>{comentario.texto}</Text>
                         </View>
                     )}
+                    <View style={styles.novoComentario}>
+                        <TextInput style={styles.input}
+                            placeholder='Adicione um comentário...'
+                            underlineColorAndroid="transparent"
+                            ref={input => this.inputComentario = input}
+                            onChangeText={texto => this.setState({ valorComentario: texto })} />
+                        <TouchableOpacity onPress={this.adicionaComentario}>
+                            <Image style={styles.botaoComentario}
+                                source={require('../../resources/img/send.png')} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
         )
@@ -153,6 +189,22 @@ const styles = StyleSheet.create({
     tituloComentario: {
         fontWeight: 'bold',
         marginRight: 10,
-    }
+    },
+    input: {
+        flex: 1,
+        height: 40,
+    },
+
+    botaoComentario: {
+        width: 30,
+        height: 30,
+    },
+    novoComentario: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: 'lightgray',
+    },
+
 });
 
