@@ -27,6 +27,17 @@ export default class InstaluraMobile extends Component {
     }
   }
 
+  buscaPorId = (idFoto) => {
+    const foto = this.state.fotos.find(foto => foto.id === idFoto)
+  
+    return foto
+  }
+
+  atualizaFotos = (fotoAtualiza) => {
+    let fotos = this.state.fotos.map(foto => foto.id === fotoAtualiza.id ? fotoAtualiza : foto)
+    this.setState({ fotos });
+  }
+
   componentDidMount() {
     fetch('http:192.168.0.137:8080///api/public/fotos/rafael')
       .then(response => response.json())
@@ -35,7 +46,7 @@ export default class InstaluraMobile extends Component {
   }
 
   like = (idFoto) => {
-    const foto = this.state.fotos.find(foto => foto.id === idFoto)
+    const foto = this.buscaPorId(idFoto)
 
     let novaLista = [];
 
@@ -56,13 +67,11 @@ export default class InstaluraMobile extends Component {
       likers: novaLista
     }
 
-    let fotos = this.state.fotos.map(foto => foto.id === fotoAtualiza.id ? fotoAtualiza : foto)
-
-    this.setState({ fotos });
+    this.atualizaFotos(fotoAtualiza)
   }
 
   adicionaComentario = (idFoto, valorComentario) => {
-    const foto = this.state.fotos.find(foto => foto.id === idFoto)
+    const foto = this.buscaPorId(idFoto)
 
     if (valorComentario === '')
       return;
@@ -81,8 +90,7 @@ export default class InstaluraMobile extends Component {
       comentarios: novaLista,
     }
     //logica
-    let fotos = this.state.fotos.map(foto => foto.id === fotoAtualiza.id ? fotoAtualiza : foto)
-    this.setState({ fotos });
+    this.atualizaFotos(fotoAtualiza);
   }
 
 
