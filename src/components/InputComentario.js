@@ -25,17 +25,20 @@ export default class InputComentario extends Component {
 
     render() {
 
-        const { comentarioCallback } = this.props
-     
+        const { idFoto, comentarioCallback } = this.props
+
         return (
             <View style={styles.novoComentario}>
                 <TextInput style={styles.input}
                     placeholder='Adicione um comentário...'
                     underlineColorAndroid="transparent"
                     ref={input => this.inputComentario = input}
-                    onChangeText={texto => this.setState({ valorComentario: texto })}/>
-                <TouchableOpacity onPress={ () => {comentarioCallback(this.state.valorComentario)
-                this.inputComentario.clear()}}>
+                    onChangeText={texto => this.setState({ valorComentario: texto })} />
+                <TouchableOpacity onPress={() => {
+                    comentarioCallback(idFoto, this.state.valorComentario)
+                    this.inputComentario.clear()
+                    this.setState({ valorComentario: '' })
+                }}>
                     <Image style={styles.botaoComentario}
                         source={require('../../resources/img/send.png')} />
                 </TouchableOpacity>

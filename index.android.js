@@ -28,29 +28,77 @@ export default class InstaluraMobile extends Component {
   }
 
   componentDidMount() {
-    fetch('https://instalura-api.herokuapp.com/api/public/fotos/rafael')
+    fetch('http:192.168.0.137:8080///api/public/fotos/rafael')
       .then(response => response.json())
       .then(json => this.setState({ fotos: json }))
-
+    // https://instalura-api.herokuapp.com/api/public/fotos/rafael
   }
+
+  like = (idFoto) => {
+    const foto = this.state.fotos.find(foto => foto.id === idFoto)
+
+    let novaLista = [];
+
+    if (!foto.likeada) {
+      novaLista = [
+        ...foto.likers,
+        { login: 'meuUsuario' }
+      ]
+    }
+    else {
+      novaLista = foto.likers.filter(liker => liker.login !== 'meuUsuario')
+      //retorna todos os elementos do array para os quais o resultado é true
+    }
+
+    const fotoAtualiza = {
+      ...foto,
+      likeada: !foto.likeada,
+      likers: novaLista
+    }
+
+    let fotos = this.state.fotos.map(foto => foto.id === fotoAtualiza.id ? fotoAtualiza : foto)
+
+    this.setState({ fotos });
+  }
+
+  adicionaComentario = (idFoto, valorComentario) => {
+    const foto = this.state.fotos.find(foto => foto.id === idFoto)
+
+    if (valorComentario === '')
+      return;
+
+    const novaLista = [
+      ...foto.comentarios,
+      {
+        id: Math.random(),
+        login: 'meuUsuario',
+        texto: valorComentario,
+      }
+    ]
+
+    const fotoAtualiza = {
+      ...foto,
+      comentarios: novaLista,
+    }
+    //logica
+    let fotos = this.state.fotos.map(foto => foto.id === fotoAtualiza.id ? fotoAtualiza : foto)
+    this.setState({ fotos });
+  }
+
 
   render() {
 
     return (
-      <FlatList style={styles.container}
+      <FlatList
         data={this.state.fotos}
         keyExtractor={item => item.id}
         renderItem={({ item }) =>
-          <Post foto={item} />
+          <Post foto={item}
+            likeCallback={this.like}
+            comentarioCallback={this.adicionaComentario} />
         } />
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 20
-  }
-});
 
 AppRegistry.registerComponent('InstaluraMobile', () => InstaluraMobile);

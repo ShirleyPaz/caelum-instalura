@@ -22,13 +22,6 @@ import Likes from './Likes'
 
 
 export default class Post extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            foto: this.props.foto,
-        }
-
-    }
 
     exibeLegenda = (foto) => {
         if (foto.comentario === '')
@@ -44,55 +37,9 @@ export default class Post extends Component {
         )
     }
 
-    like = () => {
-        const { foto } = this.state;
-        let novaLista = [];
-
-        if (!foto.likeada) {
-            novaLista = [
-                ...foto.likers,
-                { login: 'meuUsuario' }
-            ]
-        }
-        else {
-            novaLista = foto.likers.filter(liker => liker.login !== 'meuUsuario')
-        }
-
-        const fotoAtualiza = {
-            ...foto,
-            likeada: !foto.likeada,
-            likers: novaLista
-        }
-
-        this.setState({ foto: fotoAtualiza });
-    }
-
-    adicionaComentario = (valorComentario) => {
-
-        if (valorComentario === '')
-            return;
-
-        const novaLista = [
-            ...this.state.foto.comentarios,
-            {
-                id: Math.random(),
-                login: 'meuUsuario',
-                texto: valorComentario,
-            }
-        ]
-
-        const fotoAtualiza = {
-            ...this.state.foto,
-            comentarios: novaLista,
-        }
-        //logica
-        this.setState({ foto: fotoAtualiza })
-    }
-
-
     render() {
 
-        const { foto } = this.state
+        const { foto, likeCallback, comentarioCallback } = this.props
 
         return (
             <View>
@@ -108,10 +55,10 @@ export default class Post extends Component {
                     style={styles.fotoDoPost} />
 
                 <View style={styles.rodape}>
-                    <Likes likesCallback={this.like} foto={foto} />
+                    <Likes likeCallback={likeCallback} foto={foto} />
 
                     {this.exibeLegenda(foto)}
-                    
+
                     {foto.comentarios.map((comentario) =>
                         <View style={styles.comentario} key={comentario.id}>
                             <Text style={styles.tituloComentario}>
@@ -120,7 +67,7 @@ export default class Post extends Component {
                             <Text>{comentario.texto}</Text>
                         </View>
                     )}
-                    <InputComentario comentarioCallback={this.adicionaComentario} />
+                    <InputComentario comentarioCallback={comentarioCallback} idFoto={foto.id} />
                 </View>
             </View>
         )
